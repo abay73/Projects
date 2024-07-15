@@ -84,7 +84,7 @@ VALUES
 
 
 
-/* 1. What is the total amount each customer spent at the restaurant?
+Q1. What is the total amount each customer spent at the restaurant?
 
 */
 
@@ -94,10 +94,11 @@ JOIN menu AS m
 ON s.product_id = m.product_id
 GROUP BY customer_id; 
 
+Answer:
 --Customer A spent the most with $76 closely followed by Customer B who spent $74.
 --Customer C was much further behind spending only $36
 
-/*  2. How many days has each customer visited the restaurant?
+/*  Q2. How many days has each customer visited the restaurant?
 
 */
 
@@ -106,10 +107,11 @@ FROM sales
 GROUP BY customer_id
 order by visitor_frequency desc;
 
+Answer:
 --Customer B is the most frequent visitor with 6 visits followed by Customer A  and then C--
 
 
-/* 3. What was the first item from the menu purchased by each customer?
+ Q3. What was the first item from the menu purchased by each customer?
 
 */
 
@@ -128,11 +130,13 @@ FROM ordered_sales_cte
 WHERE rank = 1
 GROUP BY customer_id, product_name;
 
---Customer A's first order is curry and sushi
---Customer B's first order is curry
---Customer C's first order is ramen
+Answer:
+Customer A's first order is curry and sushi
+Customer B's first order is curry
+Customer C's first order is ramen
 
-/*4. What is the most purchased item on the menu and how many times was it purchased by all customers?
+
+Q4. What is the most purchased item on the menu and how many times was it purchased by all customers?
 */
 
 
@@ -144,12 +148,12 @@ GROUP BY s.product_id, product_name
 ORDER BY most_purchased DESC
 LIMIT 1;
 
---The most purcahsed item on the menu is ramen
+Answer: 
+The most purcahsed item on the menu is ramen
 
 
-/* 
+Question:
 5. Which item was the most popular for each customer?
-*/
 
 WITH fav_item_cte AS
 (
@@ -167,12 +171,13 @@ SELECT customer_id, product_name, order_count
 FROM fav_item_cte 
 WHERE rank = 1;
 
+Answer:
 --Customer A and C's favourite dish is ramen
 --Customer B enjoys all the items equally
 
 
 /* 
-6.Which item was purchased first by the customer after they became a member?
+Q6.Which item was purchased first by the customer after they became a member?
 */
 
 WITH member_sales_cte AS 
@@ -192,10 +197,12 @@ JOIN menu AS m2
  ON s.product_id = m2.product_id
 WHERE rank = 1;
 
+Answer:
 --Customer A's first order as a member is curry
 --Customer B's first order as a member is sushi
 --Remember Customer C is not a member
 
+Question:
 
 /* 
 7. Which item was purchased just before the customer became a member?
@@ -217,11 +224,12 @@ JOIN menu AS m2
  ON s.product_id = m2.product_id
 WHERE rank = 1;
 
+Answer:
 --Customer A's order before they became a member is sushi and curry
 --Customer B's order before they became a member is suhi
 
 /* 
-8.
+Question8.
 What is the total items and amount spent for each member before they became a member?
 */
 
@@ -234,12 +242,14 @@ JOIN menu AS mm
 WHERE s.order_date < m.join_date
 GROUP BY s.customer_id;
 
+Answer:
 --Customer A spent $25 on 2 items
 --Customer B spent $40 on 2 items
 
 
+
 /*  
-9. If each $1 spent equates to 10 points and sushi has a 2x points multiplier — how many points would each customer have?
+Question 9. If each $1 spent equates to 10 points and sushi has a 2x points multiplier — how many points would each customer have?
 */
 
 WITH price_point_cte AS
@@ -258,14 +268,14 @@ JOIN sales AS s
 GROUP BY s.customer_id
 order by total_points desc;
 
+Answer:
 --Customer B has the most points with 940 closely followed by Customer A with 860 points.
 --Customer C is much further behind with 360 points
 
 
 
 /*
-
-10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi — how many points do customer A and B have at the end of January?
+Question 10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi — how many points do customer A and B have at the end of January?
 
 
 */
@@ -293,7 +303,7 @@ WHERE s.order_date < d.date_trunc
 GROUP BY d.customer_id, s.order_date, d.join_date, d.bonus_week, d.date_trunc, m.product_name, m.price
 ;
 
-
+Answer:
 --Customer A has 1,370 points
 --Customer B has 820 points--
 
