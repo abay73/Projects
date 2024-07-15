@@ -10,4 +10,4 @@ https://8weeksqlchallenge.com/
 
 1. Danny's diner
 2. Pizza Runner
-3. Foodie - Fi
+3. Foodie-Fi
