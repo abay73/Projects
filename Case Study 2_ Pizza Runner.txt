@@ -15,7 +15,7 @@ He has prepared for us an entity relationship diagram of his database design but
 All datasets exist within the pizza_runner database schema - be sure to include this reference within your SQL scripts as you start exploring the data and answering the case study questions.
 
 
-CREATE DATABASE "PIzza_runner"
+CREATE DATABASE "Pizza_runner"
     WITH 
     OWNER = postgres
     ENCODING = 'UTF8'
@@ -40,13 +40,10 @@ VALUES
   (3, '2021-01-08'),
   (4, '2021-01-15');
 
-select * from runner_orders;
-
-
 
 
 --Creating Table 'Customer_orders' and inserting data
--- I am knowingly putting wrong values in and will clean them later on--
+-- I am knowingly putting wrong values in and will clean them later on to test my Data cleaning skills--
 drop table customer_orders;
 CREATE TABLE customer_orders (
   "order_id" INTEGER,
@@ -100,7 +97,7 @@ VALUES
   ('8', '2', '2020-01-10 00:15:02', '23.4 km', '15 minute', 'null'),
   ('9', '2', NULL, 'null', 'null', 'Customer Cancellation'),
   ('10', '1', '2020-01-11 18:50:20', '10km', '10minutes', 'null');
-  
+
 
 --creating pizza name table and inserting data--
 drop table pizza_names;
@@ -238,27 +235,30 @@ END;
 -- Section A : Pizza metrics--
 
 /* 
-1. How many pizzas were ordered?
+Q1. How many pizzas were ordered?
 */
 
 select count(order_id) AS pizza_order_count
 from customer_orders;
 
+Answer:
+
 --There were 14 pizzas ordered--
 
 
 /*
-2. How many unique customer orders were made?
+Q2. How many unique customer orders were made?
 */
 
 SELECT COUNT(DISTINCT order_id) AS number_of_unique_orders
 FROM customer_orders;
 
+Answer:
 --There were 10 unique customer orders made--
 
 
 /*
-3. How many successful orders were delivered by each runner
+Q3. How many successful orders were delivered by each runner
 */
 
 
@@ -276,7 +276,7 @@ and Runner 3 is last with one order
 */
 
 /*
-4 How many of each type of pizza was delivered
+Q4. How many of each type of pizza was delivered
 */
 
 select * from customer_orders;
@@ -291,12 +291,13 @@ where r.distance>0
 group by p.pizza_name;
 
 
+Answer:
 /*
 There werre 9 Meatlovers Pizzas and 3 vegetarian pizza delivered
 */
 
 /*
-5. How many Vegetarian and Meatlovers were ordered by each customer?
+Q5. How many Vegetarian and Meatlovers were ordered by each customer?
 */
 
 select * from pizza_names;
@@ -312,6 +313,7 @@ order by c.customer_id;
 
 /*
 
+Answer:
 Customer 101 ordered 2 meatlovers pizzas and 1 Vegetarian pizza
 Customer 102 ordered 2 meatlovers pizza and 1 vegetarian pizza
 Customer 103 ordered 3 meatlovers pizza and 1 vegetarian pizza
@@ -321,7 +323,7 @@ Customer 105 ordered 1 Veggie pizza
 */
 
 /*
-6. What was the maximum number of pizzas delivered in a single order?
+Question 6. What was the maximum number of pizzas delivered in a single order?
 */
 select * from customer_orders;
 select * from runner_orders;
@@ -334,18 +336,17 @@ where r.distance>0
 group by c.customer_id
 order by pizzas_delivered desc
 ;
-a|Q1\
 
+Answer:
 /*
 3 pizzas was the most  in a single order by Customers 102,104,103
 */
 
+Extra Answer:
 /*
-Another solution to this problem isb using with statement--
-
+Another solution to this problem is using with statement--
 
 */
-
 
 with pizza_orders_cte as 
 (
@@ -365,7 +366,7 @@ order by pizza_count;
 
 
 /* 
-7.For each customer, how many delivered pizzas had at 
+Question 7.For each customer, how many delivered pizzas had at 
 least 1 change and how many had no changes?
 */
 
@@ -385,8 +386,8 @@ select c.customer_id,
 	where r.distance>0
 	group by c.customer_id
 	order by c.customer_id;
-/*
 
+Answer:
 --Customer 101 and 102 had no changes on any pizzas they ordered
 --Customer 103,104,105 had at least one change on their pizza
 */
@@ -394,7 +395,7 @@ select c.customer_id,
 
 
 /*
-8. How many pizzas were delivered that had both exclusions and extras?
+Question 8. How many pizzas were delivered that had both exclusions and extras?
 
 */
 
@@ -413,6 +414,7 @@ and extras <> ''
 group by c.exclusions,c.extras
 order by number_of_pizzas;
 
+Answer: 
 /*
 --Only one pizza was delivered with exclusions and extras
 
@@ -433,7 +435,7 @@ select
 
 
 /*
-9.What was the total volume of pizzas ordered for each hour of the day?
+Question 9.What was the total volume of pizzas ordered for each hour of the day?
 */
 
 select count(c.order_id) as volume_of_pizzas,EXTRACT (hour from c.order_time) as hour_of_order
@@ -441,13 +443,14 @@ from customer_orders c
 group by hour_of_order
 order by volume_of_pizzas desc;
 
+Answer: 
 /*
 The largest orders placed were at 6,9 &11 pm.
 */
 
 
 /*
-10.What was the volume of orders for each day of the week?
+Question 10.What was the volume of orders for each day of the week?
 */
 
 select to_char(c.order_time,'Day') as day, count(c.order_id) as volume_of_pizzas
@@ -455,7 +458,7 @@ from customer_orders c
 group by day
 order by volume_of_pizzas desc;
 
-
+Asnwer:
 /*
 Saturday and Wednesday are the most popular days to order pizza
 */
@@ -464,6 +467,7 @@ Saturday and Wednesday are the most popular days to order pizza
 Section B: Runners and Customer Experience
 
 
+Question 1:
 /* 
 How many runners signed up for each 1 week period? (i.e. week starts 2021-01-01)
 
@@ -476,14 +480,13 @@ count(runner_id) as runner_signup
 from runners 
 group by week_number;
 
+Answer:
 /*
-
 So there were 2 signups in the first week
 followed by one signup each week for the next two weeks
-
 */
 
-
+Question 2:
 /* 
 What was the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pickup the order?*/
 
@@ -503,14 +506,14 @@ group by r.order_id,r.pickup_time,c.order_time
 select avg(pickup_minutes)::numeric(3,1) as avg_pickup_minutes 
 from time_taken_cte;
 
+Answer:
 --Time taken rounds to 16 minutes--
 
 
---we need to check the null values of the table--
 
 
 /*
-3. Is there any relationship between the number of pizzas and how long the order takes to prepare?
+Question 3. Is there any relationship between the number of pizzas and how long the order takes to prepare?
 */
 
 With prep_time_taken_cte
@@ -531,7 +534,8 @@ from prep_time_taken_cte
 group by pizza_order
 order by pizza_order desc;
 
-/*
+
+Answer:
 So for orders of 3 pizzas it takes 29 minutes
 for orders of 2 pizzas it takes 18 minutes
 for orders of 1 pizza it takes 12 minutes
@@ -541,7 +545,7 @@ Therefore orders of 2 pizzas have the quickest prep time per pizza
 */
 
 /* 
-4. What was the average distance travelled for each customer?
+Question 4. What was the average distance travelled for each customer?
 
 */
 
@@ -555,26 +559,26 @@ group by c.customer_id
 order by avg_dist_km desc;
 
 /*
-Customer 105 is the furthest from Pizza HQ at 25Km
+Answer:
+Customer 105 is the furthest from Pizza HQ at 25km
 while  Customer 104 is the closest at 10km
 */
 
 
 /*
-5. What was the difference between the longest and shortest delivery times for all orders?
+Question 5. What was the difference between the longest and shortest delivery times for all orders?
 */
-
-
 
 select (max(duration) - min(duration)) as delivery_time_difference
 from runner_orders
 where duration>0
 
+Answer:
 -- We can use the duration column to find the difference between Max and Min delivery times
 -- the delivery difference is 30 minutes
 
 /* 
-6. What was the average speed for each runner for each 
+Question 6. What was the average speed for each runner for each 
 delivery and do you notice any trend for these values?
 			
 */
@@ -589,7 +593,7 @@ group by r.runner_id,c.customer_id,r.distance,r.duration
 order by r.runner_id;
 
 /*
-
+Answer:
 Runner 1 average speed is in the range of 37.5km/h to 60km/h
 Runner 2 average speed is betwen 35 km/h to 93 km/h which is odd. 93 km/h is alarmingly high, so maybe it is worth investigating
 Runner 3 averages 40km/h
@@ -598,7 +602,7 @@ Runner 3 averages 40km/h
 
 /*
 
-7. What is the successful delivery percentage for each runner?
+Question 7. What is the successful delivery percentage for each runner?
 */
 
 SELECT runner_id, 
@@ -611,7 +615,7 @@ GROUP BY runner_id
 order by successful_delivery_percentage desc;
 
 /*
+Answer:
 Runner 1 has a 100% success rate, followed by Runner 2 with 75% and lastly runner 3 with 50%
 */
 
-select * from runner_orders;
